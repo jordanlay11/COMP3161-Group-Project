@@ -1,30 +1,27 @@
 from flask import Blueprint, request, jsonify
 from db.db import get_db_connection
-from utils.auth import check_logged_in, check_role
+from utils.auth import require_auth, require_role
 
 calendar_api = Blueprint('calendar_api', __name__)
 
 #Create event(lecturer)
 @calendar_api.route('/api/calendar', methods=['POST'])
+@require_auth
+@require_role('lecturer')  # only lecturers can create calendar events
 def create_event():
-    data = request.get_json()
-
+    data      = request.get_json()
     course_id = data.get('course_id')
-    task = data.get('task')
-    dueDate = data.get('dueDate')
-    user_id = data.get('user_id')
+    task      = data.get('task')
+    dueDate   = data.get('dueDate')
 
-    if not all([course_id, task, dueDate, user_id]):
+    # user_id comes from the verified token now
+    user_id = request.user['user_id']
+
+    if not all([course_id, task, dueDate]):
         return jsonify({"error": "Missing fields"}), 400
 
-    if not check_logged_in(user_id):
-        return jsonify({"error": "Not logged in"}), 401
-
-    if not check_role(user_id, "lecturer"):
-        return jsonify({"error": "Only lecturers can create events"}), 403
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -38,7 +35,7 @@ def create_event():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
     finally:
         cursor.close()
         conn.close()

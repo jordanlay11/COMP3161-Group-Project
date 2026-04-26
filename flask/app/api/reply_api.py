@@ -1,31 +1,28 @@
 from flask import Blueprint, request, jsonify
 from db.db import get_db_connection
-from utils.auth import check_logged_in
+from utils.auth import require_auth
 
 reply_api = Blueprint('reply_api', __name__)
 
 #Create reply
 @reply_api.route('/api/replies', methods=['POST'])
+@require_auth  # any logged-in user can reply
 def create_reply():
-    data = request.get_json()
+    data            = request.get_json()
+    thread_id       = data.get('thread_id')
+    replyBody       = data.get('replyBody')
+    parent_reply_id = data.get('parent_reply_id')  
 
-    thread_id = data.get('thread_id')
-    replyBody = data.get('replyBody')
-    user_id = data.get('user_id')
-    parent_reply_id = data.get('parent_reply_id')  # can be None
+    user_id = request.user['user_id']
 
-    if not all([thread_id, replyBody, user_id]):
+    if not all([thread_id, replyBody]):
         return jsonify({"error": "Missing fields"}), 400
 
-    # 🔐 Check logged in
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
-        # Optional: validate parent reply exists
+        # if a parent reply was provided, check it actually exists
         if parent_reply_id:
             cursor.execute(
                 "SELECT * FROM reply WHERE reply_id = %s",
@@ -34,7 +31,6 @@ def create_reply():
             if not cursor.fetchone():
                 return jsonify({"error": "Parent reply not found"}), 400
 
-        # Insert reply
         cursor.execute("""
         INSERT INTO reply (thread_id, parent_reply_id, replyBody, createdBy)
         VALUES (%s, %s, %s, %s)
@@ -79,21 +75,17 @@ def get_replies(thread_id):
 
 #Delete reply for bonus
 @reply_api.route('/api/replies/<int:reply_id>', methods=['DELETE'])
+@require_auth  # must be logged in to delete
 def delete_reply(reply_id):
-    data = request.get_json()
-    user_id = data.get('user_id')
 
-    if not user_id:
-        return jsonify({"error": "Missing user_id"}), 400
 
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
+    user_id = request.user['user_id']
 
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
-        # Only creator can delete
+        # only the person who created the reply can delete it
         cursor.execute("""
         DELETE FROM reply
         WHERE reply_id = %s AND createdBy = %s

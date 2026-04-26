@@ -1,3 +1,4 @@
+import os            #gives us access to environment variables
 from flask import Flask
 from api.auth_api import auth_api
 from api.course_api import course_api
@@ -10,6 +11,9 @@ from api.content_api import content_api
 from api.report_api import report_api
 
 app = Flask(__name__)
+
+# Load the SECRET_KEY from environment variables (set in .env / docker-compose.yml)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 app.register_blueprint(auth_api)
 app.register_blueprint(course_api)

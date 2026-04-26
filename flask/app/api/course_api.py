@@ -1,46 +1,38 @@
 from flask import Blueprint, request, jsonify
 from db.db import get_db_connection
-from utils.auth import check_logged_in, check_role
+from utils.auth import require_auth, require_role
 
 course_api = Blueprint('course_api', __name__)
 
 #Create course for admin
 @course_api.route('/api/courses', methods=['POST'])
+@require_auth          # verifies the JWT token
+@require_role('admin') # checks role from the token 
 def create_course():
-    data = request.get_json()
-
-    title = data.get('title')
-    user_id = data.get('user_id')   # IMPORTANT: pass user_id now
+    data     = request.get_json()
+    title    = data.get('title')
     admin_id = data.get('admin_id')
-    lec_id = data.get('lec_id')
+    lec_id   = data.get('lec_id')
 
-    if not all([title, user_id, admin_id, lec_id]):
+    user_id = request.user['user_id']
+
+    if not all([title, admin_id, lec_id]):
         return jsonify({"error": "Missing fields"}), 400
 
-    #Check logged in
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
-    #Check admin role
-    if not check_role(user_id, "admin"):
-        return jsonify({"error": "Only admins can create courses"}), 403
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute(
             "INSERT INTO course (title, created_by) VALUES (%s, %s)",
             (title, admin_id)
         )
-
         course_id = cursor.lastrowid
 
         cursor.execute(
             "INSERT INTO course_lecturer (course_id, lec_id) VALUES (%s, %s)",
             (course_id, lec_id)
         )
-
         conn.commit()
 
         return jsonify({"message": "Course created", "course_id": course_id}), 201

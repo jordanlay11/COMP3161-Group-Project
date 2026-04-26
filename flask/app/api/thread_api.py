@@ -1,27 +1,25 @@
 from flask import Blueprint, request, jsonify
 from db.db import get_db_connection
-from utils.auth import check_logged_in
+from utils.auth import require_auth
 
 thread_api = Blueprint('thread_api', __name__)
 
 #Create thread
 @thread_api.route('/api/threads', methods=['POST'])
+@require_auth  # any logged-in user can create a thread
 def create_thread():
-    data = request.get_json()
-
-    forum_id = data.get('forum_id')
+    data        = request.get_json()
+    forum_id    = data.get('forum_id')
     threadTitle = data.get('threadTitle')
-    threadBody = data.get('threadBody')
-    user_id = data.get('user_id')
+    threadBody  = data.get('threadBody')
 
-    if not all([forum_id, threadTitle, threadBody, user_id]):
+    user_id = request.user['user_id']
+
+    if not all([forum_id, threadTitle, threadBody]):
         return jsonify({"error": "Missing fields"}), 400
 
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("""

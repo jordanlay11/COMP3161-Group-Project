@@ -1,26 +1,25 @@
 from flask import Blueprint, request, jsonify
 from db.db import get_db_connection
-from utils.auth import check_logged_in
+from utils.auth import require_auth
 
 forum_api = Blueprint('forum_api', __name__)
 
 #Create forum
 @forum_api.route('/api/forums', methods=['POST'])
+@require_auth  # any logged-in user can create a forum
 def create_forum():
-    data = request.get_json()
-
-    course_id = data.get('course_id')
+    data       = request.get_json()
+    course_id  = data.get('course_id')
     forumTitle = data.get('forumTitle')
-    user_id = data.get('user_id')
 
-    if not all([course_id, forumTitle, user_id]):
+    # user_id comes from the verified token now
+    user_id = request.user['user_id']
+
+    if not all([course_id, forumTitle]):
         return jsonify({"error": "Missing fields"}), 400
 
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("""

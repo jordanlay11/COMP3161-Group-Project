@@ -1,31 +1,27 @@
 from flask import Blueprint, request, jsonify
 from db.db import get_db_connection
-from utils.auth import check_logged_in, check_role
+from utils.auth import require_auth, require_role
 
 assignment_api = Blueprint('assignment_api', __name__)
 
 #Create assignment(lecturer)
 @assignment_api.route('/api/assignments', methods=['POST'])
+@require_auth
+@require_role('lecturer')
 def create_assignment():
-    data = request.get_json()
-
+    data      = request.get_json()
     course_id = data.get('course_id')
-    title = data.get('title')
+    title     = data.get('title')
     max_grade = data.get('max_grade', 100)
-    user_id = data.get('user_id')
 
-    if not all([course_id, title, user_id]):
+
+    user_id = request.user['user_id']
+
+    if not all([course_id, title]):
         return jsonify({"error": "Missing fields"}), 400
 
-    # 🔐 Auth checks
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
-    if not check_role(user_id, "lecturer"):
-        return jsonify({"error": "Only lecturers can create assignments"}), 403
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -70,26 +66,19 @@ def get_assignments(course_id):
 
 #Grade submission(Lecturer only)
 @assignment_api.route('/api/grade', methods=['POST'])
+@require_auth
+@require_role('lecturer')
 def grade_submission():
-    data = request.get_json()
-
+    data          = request.get_json()
     assignment_id = data.get('assignment_id')
-    sid = data.get('sid')
-    grade = data.get('grade')
-    user_id = data.get('user_id')
+    sid           = data.get('sid')
+    grade         = data.get('grade')
 
-    if not all([assignment_id, sid, grade, user_id]):
+    if not all([assignment_id, sid, grade]):
         return jsonify({"error": "Missing fields"}), 400
 
-    # 🔐 Auth checks
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
-    if not check_role(user_id, "lecturer"):
-        return jsonify({"error": "Only lecturers can grade"}), 403
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -111,25 +100,18 @@ def grade_submission():
 
 #Submit assignment(student only)
 @assignment_api.route('/api/submissions', methods=['POST'])
+@require_auth
+@require_role('student')
 def submit_assignment():
-    data = request.get_json()
-
+    data          = request.get_json()
     assignment_id = data.get('assignment_id')
-    sid = data.get('sid')
-    user_id = data.get('user_id')
+    sid           = data.get('sid')
 
-    if not all([assignment_id, sid, user_id]):
+    if not all([assignment_id, sid]):
         return jsonify({"error": "Missing fields"}), 400
 
-    # 🔐 Auth checks
-    if not check_logged_in(user_id):
-        return jsonify({"error": "User not logged in"}), 401
-
-    if not check_role(user_id, "student"):
-        return jsonify({"error": "Only students can submit"}), 403
-
     try:
-        conn = get_db_connection()
+        conn   = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("""
