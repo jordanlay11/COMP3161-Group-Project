@@ -41,8 +41,10 @@ def create_course():
         return jsonify({"error": str(e)}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 #Enroll student
 @course_api.route('/api/enroll', methods=['POST'])
@@ -78,8 +80,10 @@ def enroll_student():
         return jsonify({"error": str(e)}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 #Get courses for student
 @course_api.route('/api/student/<int:sid>/courses', methods=['GET'])
@@ -104,8 +108,10 @@ def get_student_courses(sid):
         return jsonify({"error": str(e)}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 #Get courses for lecturer
 @course_api.route('/api/lecturer/<int:lec_id>/courses', methods=['GET'])
@@ -127,8 +133,10 @@ def get_lecturer_courses(lec_id):
         return jsonify({"error": str(e)}), 500
     
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 #Get all courses
 @course_api.route('/api/courses', methods=['GET'])
@@ -147,8 +155,10 @@ def get_courses():
         return jsonify({"error": str(e)}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 #Get members of a course
 @course_api.route('/api/courses/<int:course_id>/members', methods=['GET'])
@@ -184,7 +194,9 @@ def get_course_members(course_id):
         return jsonify({"error": str(e)}), 500
     
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
     
