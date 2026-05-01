@@ -1,0 +1,720 @@
+{
+  "info": {
+    "_postman_id": "733ab7f8-8257-40b9-92ff-6e2ad84e3612",
+    "name": "Comp3161 Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53208893",
+    "_collection_link": "https://go.postman.co/collection/53208893-733ab7f8-8257-40b9-92ff-6e2ad84e3612?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authorization",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin_test@gmail.com\",\r\n  \"password\": \"password123\",\r\n  \"role\": \"admin\",\r\n  \"name\": \"Admin Test\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin_test@gmail.com\",\r\n  \"password\": \"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Course(Admin)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Test Course\",\r\n  \"admin_id\": 1,\r\n  \"lec_id\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/courses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin_test@gmail.com\",\r\n  \"password\": \"password123\"\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/logout",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Enroll Student",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sid\": 1,\r\n  \"course_id\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/enroll",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "enroll"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Student Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/student/1/courses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "student",
+            "1",
+            "courses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Lecturer Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/lecturer/1/courses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "lecturer",
+            "1",
+            "courses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Course Members",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/1/members",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "1",
+            "members"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Event (Lecturer)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"course_id\": 1,\r\n  \"task\": \"Assignment Due\",\r\n  \"dueDate\": \"2026-05-10\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/calendar",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "calendar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Course Events",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/1/calendar",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "1",
+            "calendar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Students Events",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/student/1/calendar?date=2026-05-10",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "student",
+            "1",
+            "calendar"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-05-10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Forum",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"course_id\": 1,\r\n  \"forumTitle\": \"General Discussion\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/forums",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "forums"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Forums",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/1/forums",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "1",
+            "forums"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Thread",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"forum_id\": 1,\r\n  \"threadTitle\": \"Welcome\",\r\n  \"threadBody\": \"Introduce yourself\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/threads",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "threads"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Threads",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/forums/1/threads",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "forums",
+            "1",
+            "threads"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Reply",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"thread_id\": 1,\r\n  \"replyBody\": \"Hello everyone\",\r\n  \"parent_reply_id\": null\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/replies",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "replies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Replies",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/threads/1/replies",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "threads",
+            "1",
+            "replies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Reply(BONUS)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/replies/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "replies",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Assignment (Lecturer)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"course_id\": 1,\r\n  \"title\": \"Assignment 1\",\r\n  \"max_grade\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/assignments",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "assignments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Assignments",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/1/assignments",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "1",
+            "assignments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Submit Assignment",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"assignment_id\": 1,\r\n  \"sid\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/submissions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "submissions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Grade Assignment",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"assignment_id\": 1,\r\n  \"sid\": 1,\r\n  \"grade\": 85\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/grade",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "grade"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Student Grades",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/student/1/grades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "student",
+            "1",
+            "grades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Large Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/reports/large-courses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "reports",
+            "large-courses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Busy Students",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/reports/busy-students",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "reports",
+            "busy-students"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Busy Lecturers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/reports/busy-lecturers",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "reports",
+            "busy-lecturers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Top Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/reports/top-courses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "reports",
+            "top-courses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Top Students",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/reports/top-students",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "reports",
+            "top-students"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
